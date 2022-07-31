@@ -11,7 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import model.ModelLogin;
 
 /*o chamado controller são as servlets*/
-@WebServlet("/ServletLogin")
+@WebServlet(urlPatterns = {"/principal/ServletLogin", "/ServletLogin"})
 public class ServletLogin extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -28,6 +28,7 @@ public class ServletLogin extends HttpServlet {
 
 		String login = request.getParameter("login");
 		String senha = request.getParameter("senha");
+		String url = request.getParameter("url");
 
 		if (login != null && !login.isEmpty() && senha != null && !senha.isEmpty()) {
 
@@ -36,13 +37,19 @@ public class ServletLogin extends HttpServlet {
 			modelLogin.setSenha(senha);
 			if (modelLogin.getLogin().equalsIgnoreCase("admin")
 					&& modelLogin.getSenha().equalsIgnoreCase("admin")) {/* simulando um login */
-				
+
 				request.getSession().setAttribute("usuario", modelLogin.getLogin());
-				RequestDispatcher redirecionar = request.getRequestDispatcher("principal/principal.jsp");
+
+				if (url == null || url.equals("null")) {
+					url = "principal/principal.jsp";
+
+				}
+
+				RequestDispatcher redirecionar = request.getRequestDispatcher(url);
 				redirecionar.forward(request, response);
-									
+
 			} else {
-				RequestDispatcher redirecionar = request.getRequestDispatcher("index.jsp");
+				RequestDispatcher redirecionar = request.getRequestDispatcher("/index.jsp");
 				request.setAttribute("msg", "Informe o login e a senha Corretamente");
 				redirecionar.forward(request, response);
 
