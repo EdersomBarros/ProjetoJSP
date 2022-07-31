@@ -32,7 +32,7 @@ public class SingleConnectionBanco {
 			if (connection == null) {
 
 				Class.forName("org.postgresql.Driver");
-				connection = DriverManager.getConnection(senha, user, banco);
+				connection = DriverManager.getConnection(banco, user, senha);
 				connection.setAutoCommit(false);
 			}
 
