@@ -30,9 +30,11 @@ h1 {
 
 h5 {
 	position: absolute;
-	top: 70%;
+	top: 10%;
 	left: 33%;
-	color: red;
+	color: #842029;
+    background-color: #f8d7da;
+    border-color: #f5c2c7;
 }
 </style>
 
@@ -44,13 +46,13 @@ h5 {
 		class="row g-3 needs-validation" novalidate>
 		<input type="hidden" value="<%=request.getParameter("url")%>"
 			name="url">
-		<div class="col-md-6">
+		<div class="mb-3">
 			<label class="form-label">Login</label> <input class="form-control"
 				name="login" type="text" required="required">
 			<div class="invalid-feedback">Obrigatório</div>
 			<div class="valid-feedback">Ok!</div>
 		</div>
-		<div class="col-md-6">
+		<div class="mb-3">
 			<label class="form-label">Senha</label> <input class="form-control"
 				vname="senha" type="password" required="required">
 			<div class="invalid-feedback">Obrigatório</div>
