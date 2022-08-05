@@ -54,7 +54,7 @@ h5 {
 		</div>
 		<div class="mb-3">
 			<label class="form-label">Senha</label> <input class="form-control"
-				vname="senha" type="password" required="required">
+				name="senha" type="password" required="required">
 			<div class="invalid-feedback">Obrigatório</div>
 			<div class="valid-feedback">Ok!</div>
 		</div>
