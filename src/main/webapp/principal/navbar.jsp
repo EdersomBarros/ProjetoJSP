@@ -20,7 +20,7 @@
 							</div>
 						</div>
 						<a href="index.html"> <img class="img-fluid"
-							src="assets/images/logo.png" alt="Theme-Logo" />
+							src="<%= request.getContextPath()%>/assets/images/logo.png" alt="Theme-Logo" />
 						</a> <a class="mobile-options waves-effect waves-light"> <i
 							class="ti-more"></i>
 						</a>
@@ -59,10 +59,10 @@
 									<li class="waves-effect waves-light">
 										<div class="media">
 											<img class="d-flex align-self-center img-radius"
-												src="assets/images/avatar-2.jpg"
+												src="<%= request.getContextPath()%>/assets/images/avatar-2.jpg"
 												alt="Generic placeholder image">
 											<div class="media-body">
-												<h5 class="notification-user">John Doe</h5>
+												<h5 class="notification-user"><%= session.getAttribute("usuario") %></h5>
 												<p class="notification-msg">Lorem ipsum dolor sit amet,
 													consectetuer elit.</p>
 												<span class="notification-time">30 minutes ago</span>
@@ -72,7 +72,7 @@
 									<li class="waves-effect waves-light">
 										<div class="media">
 											<img class="d-flex align-self-center img-radius"
-												src="assets/images/avatar-4.jpg"
+												src="<%= request.getContextPath()%>/assets/images/avatar-4.jpg"
 												alt="Generic placeholder image">
 											<div class="media-body">
 												<h5 class="notification-user">Joseph William</h5>
@@ -85,7 +85,7 @@
 									<li class="waves-effect waves-light">
 										<div class="media">
 											<img class="d-flex align-self-center img-radius"
-												src="assets/images/avatar-3.jpg"
+												src="<%= request.getContextPath()%>/assets/images/avatar-3.jpg"
 												alt="Generic placeholder image">
 											<div class="media-body">
 												<h5 class="notification-user">Sara Soudein</h5>
@@ -98,8 +98,8 @@
 								</ul></li>
 							<li class="user-profile header-notification"><a href="#!"
 								class="waves-effect waves-light"> <img
-									src="assets/images/avatar-4.jpg" class="img-radius"
-									alt="User-Profile-Image"> <span>John Doe</span> <i
+									src="<%= request.getContextPath()%>/assets/images/avatar-4.jpg" class="img-radius"
+									alt="User-Profile-Image"> <span><%= session.getAttribute("usuario") %></span> <i
 									class="ti-angle-down"></i>
 							</a>
 								<ul class="show-notification profile-notification">
