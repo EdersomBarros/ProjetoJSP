@@ -17,7 +17,7 @@ import jakarta.servlet.http.HttpFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
-@WebFilter(urlPatterns = { "/principal/*" }) /* intercepta todas as requisições que vierem do projeto ou mapeamento */
+@WebFilter(urlPatterns = { "/principal/*" }) /* intercepta todas as requisiï¿½ï¿½es que vierem do projeto ou mapeamento */
 public class FilterAutenticacao extends HttpFilter implements Filter {
 
 	private static Connection connection;
@@ -25,7 +25,7 @@ public class FilterAutenticacao extends HttpFilter implements Filter {
 	public FilterAutenticacao() {
 	}
 
-	/* encerra os processos quando o servidor é parado */
+	/* encerra os processos quando o servidor ï¿½ parado */
 	public void destroy() {
 		try {
 			connection.close();
@@ -34,9 +34,9 @@ public class FilterAutenticacao extends HttpFilter implements Filter {
 		}
 	}
 
-	/* Intercepta as requisições e as respostas no sistema */
+	/* Intercepta as requisiï¿½ï¿½es e as respostas no sistema */
 	/* tudo que fizer no sistema vai passar por aqui */
-	/* Ex.: validações de autenticações */
+	/* Ex.: validaï¿½ï¿½es de autenticaï¿½ï¿½es */
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 			try {
@@ -46,23 +46,23 @@ public class FilterAutenticacao extends HttpFilter implements Filter {
 	
 				String usuarioLogado = (String) session.getAttribute("usuario");
 	
-				String urlParaAutenticar = req.getServletPath();/* url está sendo acessada */
+				String urlParaAutenticar = req.getServletPath();/* url estï¿½ sendo acessada */
 	
-				/* validar se está logado senão redirediciona a tela de login */
+				/* validar se estï¿½ logado senï¿½o redirediciona a tela de login */
 				if (usuarioLogado == null
-						&& !urlParaAutenticar.equalsIgnoreCase("/principal/ServletLogin")) {/* não está logado */
+						&& !urlParaAutenticar.equalsIgnoreCase("/principal/ServletLogin")) {/* nï¿½o estï¿½ logado */
 	
 					RequestDispatcher redireciona = request.getRequestDispatcher("/index.jsp?url=" + urlParaAutenticar);
 					request.setAttribute("msg", "Por favor realize o login!");
 					redireciona.forward(request, response);
-					return;/* Parar a execução a redireciona para o login */
+					return;/* Parar a execuï¿½ï¿½o a redireciona para o login */
 	
 				} else {
 	
 					chain.doFilter(request, response);
 				}
 	
-				connection.commit();/*deu tudo certo então commita as alterações no banco*/
+				connection.commit();/*deu tudo certo entï¿½o commita as alteraï¿½ï¿½es no banco*/
 
 		} catch (Exception e) {
 			e.printStackTrace();
