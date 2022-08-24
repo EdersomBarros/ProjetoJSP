@@ -37,6 +37,8 @@
 													<div class="card-block">
 														<h4 class="sub-title">Cadastros de Usuários</h4>
 														<form class="form-material" action="<%= request.getContextPath()%>/ServletUsuarioController" method="post" id="formUser">
+															
+															<input type="hidden" name="acao" id="acao" value="">
 															<div class="form-group form-default form-static-label">
 																<input type="text" name="id" id="id"
 																	class="form-control"  readonly="readonly" value="${modelLogin.id}"> <span
@@ -62,15 +64,15 @@
 																	class="form-control" required="required" autocomplete="off" value="${modelLogin.senha}"> <span
 																	class="form-bar"></span> <label class="float-label">Senha</label>
 															</div>
-															<button class="btn btn-primary waves-effect waves-light" onclick="limparForm();">Novo</button>
+															<button type="button" class="btn btn-primary waves-effect waves-light" onclick="limparForm();">Novo</button>
 															<button class="btn btn-success waves-effect waves-light">Salvar</button>
-															<button class="btn btn-danger waves-effect waves-light">Excluir</button>
+															<button type="button" class="btn btn-danger waves-effect waves-light" onclick="criaDeleteComAjax();">Excluir</button>
 														</form>
 													</div>
 												</div>
 											</div>
 										</div>
-										<span>${msg}</span>
+										<span id="msg">${msg}</span>
 
 									</div>
 									<!-- Page-body end -->
@@ -87,6 +89,41 @@
 	<jsp:include page="javascriptfile.jsp"></jsp:include>
 	
 	<script type="text/javascript">
+	
+	function criaDeleteComAjax() {
+		
+		if (confirm("Deseja Realmente Excluir os Dados?")) {
+			
+			var urlAction = document.getElementById("formUser").action;
+			var idUser = document.getElementById("id").value;
+			
+			$.ajax({
+				method: "get",
+				url : urlAction,
+				data : "id=" + idUser + "&acao=deletarAjax",
+				success : function (response){
+					
+					limparForm();
+					document.getElementById("msg").textContent = response;
+				}
+			}).fail(function(xhr, status, errorThrown){
+				alert("Erro ao deletar usuário por Id: " + xhr.responseText);
+				
+			});
+			
+		}
+		
+	}
+	
+	function criarDelete() {
+		
+		if(confirm("Deseja Realmente Excluir os Dados?")){
+		
+		document.getElementById("formUser").method = "get";
+		document.getElementById("acao").value = "deletar";
+		document.getElementById("formUser").submit();
+		}
+	}
 	
 	function limparForm() {
 		
