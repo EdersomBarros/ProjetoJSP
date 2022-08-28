@@ -33,54 +33,51 @@ public class DAOUsuarioRepository {
 			preparedSQL.execute();
 			connection.commit();
 		} else {
-			String sql = "UPDATE public.model_login SET login=?, senha=?, nome=?, email=? WHERE id = "+objeto.getId()+";";
-			
+			String sql = "UPDATE public.model_login SET login=?, senha=?, nome=?, email=? WHERE id = " + objeto.getId()
+					+ ";";
+
 			PreparedStatement prepareSQL = connection.prepareStatement(sql);
 			prepareSQL.setString(1, objeto.getLogin());
 			prepareSQL.setString(2, objeto.getSenha());
 			prepareSQL.setString(3, objeto.getNome());
 			prepareSQL.setString(4, objeto.getEmail());
-			
-			prepareSQL.executeUpdate();
-			
-			connection.commit();
-			
 
-			
+			prepareSQL.executeUpdate();
+
+			connection.commit();
+
 		}
 		return this.consultaUsuario(objeto.getLogin());
 
 	}
-	
-	public List<ModelLogin> consultaUsuarioList(String nome) throws Exception{
-		
+
+	public List<ModelLogin> consultaUsuarioList(String nome) throws Exception {
+
 		List<ModelLogin> retorno = new ArrayList<>();
-		
+
 		String sql = "SELECT * FROM model_login where upper(nome) like upper(?)";
-		
+
 		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setString(1, "%" + nome + "%");
-		
+
 		ResultSet resultado = statement.executeQuery();
-		
-		while (resultado.next()) {/*percorrer as linhas de resultado de sql*/
+
+		while (resultado.next()) {/* percorrer as linhas de resultado de sql */
 			ModelLogin modelLogin = new ModelLogin();
-			
+
 			modelLogin.setEmail(resultado.getString("email"));
 			modelLogin.setId(resultado.getLong("id"));
 			modelLogin.setLogin(resultado.getString("login"));
 			modelLogin.setNome(resultado.getString("nome"));
-			//modelLogin.setSenha(resultado.getString("senha"));
-			
+			// modelLogin.setSenha(resultado.getString("senha"));
+
 			retorno.add(modelLogin);
-			
+
 		}
-		
+
 		return retorno;
-		
-		
+
 	}
-	
 
 	public ModelLogin consultaUsuario(String login) throws Exception {
 
@@ -104,7 +101,7 @@ public class DAOUsuarioRepository {
 		return modelLogin;
 
 	}
-	
+
 	public ModelLogin consultaUsuarioID(String id) throws Exception {
 
 		ModelLogin modelLogin = new ModelLogin();
@@ -128,6 +125,33 @@ public class DAOUsuarioRepository {
 
 	}
 
+	public List<ModelLogin> consultaUsuarioList() throws Exception {
+
+		List<ModelLogin> retorno = new ArrayList<>();
+
+		String sql = "SELECT * FROM model_login;";
+
+		PreparedStatement statement = connection.prepareStatement(sql);
+
+		ResultSet resultado = statement.executeQuery();
+
+		while (resultado.next()) {/* percorrer as linhas de resultado de sql */
+			ModelLogin modelLogin = new ModelLogin();
+
+			modelLogin.setEmail(resultado.getString("email"));
+			modelLogin.setId(resultado.getLong("id"));
+			modelLogin.setLogin(resultado.getString("login"));
+			modelLogin.setNome(resultado.getString("nome"));
+			// modelLogin.setSenha(resultado.getString("senha"));
+
+			retorno.add(modelLogin);
+
+		}
+
+		return retorno;
+
+	}
+
 	public boolean validaLogin(String login) throws Exception {
 
 		String sql = "SELECT count(1) > 0 as existe from model_login where upper(login) = upper ('" + login + "');";
@@ -139,18 +163,16 @@ public class DAOUsuarioRepository {
 		return resultado.getBoolean("existe");
 
 	}
-	
-	public void deletarUser(String idUser) throws Exception{
-		
+
+	public void deletarUser(String idUser) throws Exception {
+
 		String sql = "DELETE FROM model_login WHERE id = ?;";
 		PreparedStatement preparedSQL = connection.prepareStatement(sql);
-		preparedSQL.setLong(1,Long.parseLong(idUser));
+		preparedSQL.setLong(1, Long.parseLong(idUser));
 		preparedSQL.executeUpdate();
-		
+
 		connection.commit();
-		
-		
-		
+
 	}
 
 }
