@@ -55,7 +55,7 @@ public class DAOUsuarioRepository {
 
 		List<ModelLogin> retorno = new ArrayList<>();
 
-		String sql = "SELECT * FROM model_login where upper(nome) like upper(?)";
+		String sql = "SELECT * FROM model_login where upper(nome) like upper(?) and useradmin is false;";
 
 		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setString(1, "%" + nome + "%");
@@ -83,7 +83,7 @@ public class DAOUsuarioRepository {
 
 		ModelLogin modelLogin = new ModelLogin();
 
-		String sql = "SELECT * FROM model_login where upper(login) = upper('" + login + "');";
+		String sql = "SELECT * FROM model_login where upper(login) = upper('" + login + "') and useradmin is false;";
 		PreparedStatement statement = connection.prepareStatement(sql);
 
 		ResultSet resultado = statement.executeQuery();
@@ -106,7 +106,7 @@ public class DAOUsuarioRepository {
 
 		ModelLogin modelLogin = new ModelLogin();
 
-		String sql = "SELECT * FROM model_login where id = ?;";
+		String sql = "SELECT * FROM model_login where id = ? and useradmin is false;";
 		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setLong(1, Long.parseLong(id));
 		ResultSet resultado = statement.executeQuery();
@@ -129,7 +129,7 @@ public class DAOUsuarioRepository {
 
 		List<ModelLogin> retorno = new ArrayList<>();
 
-		String sql = "SELECT * FROM model_login;";
+		String sql = "SELECT * FROM model_login WHERE useradmin is false;";
 
 		PreparedStatement statement = connection.prepareStatement(sql);
 
@@ -166,7 +166,7 @@ public class DAOUsuarioRepository {
 
 	public void deletarUser(String idUser) throws Exception {
 
-		String sql = "DELETE FROM model_login WHERE id = ?;";
+		String sql = "DELETE FROM model_login WHERE id = ? and useradmin is false;";
 		PreparedStatement preparedSQL = connection.prepareStatement(sql);
 		preparedSQL.setLong(1, Long.parseLong(idUser));
 		preparedSQL.executeUpdate();
