@@ -14,6 +14,14 @@ public class ModelLogin implements Serializable {
 	
 	private boolean useradmin;
 	
+	private String perfil;
+	
+	public void setPerfil(String perfil) {
+		this.perfil = perfil;
+	}
+	public String getPerfil() {
+		return perfil;
+	}
 	
 	
 
