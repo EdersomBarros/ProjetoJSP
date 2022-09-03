@@ -50,9 +50,9 @@
 															</div>
 															<div class="form-group form-default input-group mb-4">
 																<div class="input-group-prepend">
-																	<img alt="Imagem User" src="https://www.hostinger.com.br/tutoriais/wp-content/uploads/sites/12/2018/12/O-Que-e-CMS-Sistema-de-Gerenciamento-de-Conte%C3%BAdo.png" width="70px;">
+																	<img alt="Imagem User" id="fotoembase64"  src="" width="70px;">
 																</div>
-																<input type="file" class="form-control-file" style="margin-top: 10px; margin-left: 5px;" >
+																<input type="file" id="fileFoto" name="fileFoto" accept="image/*" onchange="visualizarImg('fotoembase64', 'fileFoto');" class="form-control-file" style="margin-top: 10px; margin-left: 5px;" >
 
 
 															</div>
@@ -228,93 +228,126 @@
 	
 	<script type="text/javascript">
 	
-	function verEditar(id) {
-		
-		var urlAction = document.getElementById("formUser").action;
-		
-		window.location.href = urlAction + '?acao=buscarEditar&id=' + id;
-		
-	}
 	
-	function buscarUsuario() {
-		
-		var nomeBusca = document.getElementById("nomeBusca").value;
-		
-		if (nomeBusca != null && nomeBusca != " " && nomeBusca.trim() != " ") {/*validando p que tem valor no banco de dados*/
-		
+	
+		function visualizarImg(fotoembase64, fileFoto) {
+
+			var preview = document.getElementById(fotoembase64); //campo de img html
+			var fileUser = document.getElementById(fileFoto).files[0];
+			var reader = new FileReader();
+
+			reader.onloadend = function() {
+				preview.src = reader.result;/*Carrega a foto na tela*/
+			};
+			if (fileUser) {
+				reader.readAsDataURL(fileUser);/*preview da imagem*/
+			} else {
+				preview.src = '';
+			}
+		}
+
+		function verEditar(id) {
+
 			var urlAction = document.getElementById("formUser").action;
-		$.ajax({
-				method: "get",
-				url : urlAction,
-				data : "nomeBusca=" + nomeBusca + "&acao=buscarUserAjax",
-				success : function (response){
-					
-					var json = JSON.parse(response);
-					
-					$('#tabelaresultados > tbody > tr').remove();
-					
-					for (var p = 0; p < json.length; p++) {
-						$('#tabelaresultados > tbody').append('<tr> <td>'+json[p].id+'</td> <td> '+json[p].nome+'</td> <td><button onclick="verEditar('+json[p].id+')" type="button" class="btn btn-info">Ver</button></td></tr>');						
+
+			window.location.href = urlAction + '?acao=buscarEditar&id=' + id;
+
+		}
+
+		function buscarUsuario() {
+
+			var nomeBusca = document.getElementById("nomeBusca").value;
+
+			if (nomeBusca != null && nomeBusca != " "
+					&& nomeBusca.trim() != " ") {/*validando p que tem valor no banco de dados*/
+
+				var urlAction = document.getElementById("formUser").action;
+				$
+						.ajax(
+								{
+									method : "get",
+									url : urlAction,
+									data : "nomeBusca=" + nomeBusca
+											+ "&acao=buscarUserAjax",
+									success : function(response) {
+
+										var json = JSON.parse(response);
+
+										$('#tabelaresultados > tbody > tr')
+												.remove();
+
+										for (var p = 0; p < json.length; p++) {
+											$('#tabelaresultados > tbody')
+													.append(
+															'<tr> <td>'
+																	+ json[p].id
+																	+ '</td> <td> '
+																	+ json[p].nome
+																	+ '</td> <td><button onclick="verEditar('
+																	+ json[p].id
+																	+ ')" type="button" class="btn btn-info">Ver</button></td></tr>');
+										}
+
+										document
+												.getElementById('totalResultados').textContent = 'Resultados: '
+												+ json.length;
+
+									}
+								}).fail(
+								function(xhr, status, errorThrown) {
+									alert("Erro ao buscar usuário por Nome: "
+											+ xhr.responseText);
+
+								});
+
+			}
+
+		}
+
+		function criaDeleteComAjax() {
+
+			if (confirm("Deseja Realmente Excluir os Dados?")) {
+
+				var urlAction = document.getElementById("formUser").action;
+				var idUser = document.getElementById("id").value;
+
+				$.ajax({
+					method : "get",
+					url : urlAction,
+					data : "id=" + idUser + "&acao=deletarAjax",
+					success : function(response) {
+
+						limparForm();
+						document.getElementById("msg").textContent = response;
 					}
-					
-					document.getElementById('totalResultados').textContent = 'Resultados: ' + json.length;
-					
-				}
-			}).fail(function(xhr, status, errorThrown){
-				alert("Erro ao buscar usuário por Nome: " + xhr.responseText);
-				
-			});
-			
-			
-			
+				}).fail(
+						function(xhr, status, errorThrown) {
+							alert("Erro ao deletar usuário por Id: "
+									+ xhr.responseText);
+
+						});
+
+			}
+
 		}
-		
-	}
-	
-	function criaDeleteComAjax() {
-		
-		if (confirm("Deseja Realmente Excluir os Dados?")) {
-			
-			var urlAction = document.getElementById("formUser").action;
-			var idUser = document.getElementById("id").value;
-			
-			$.ajax({
-				method: "get",
-				url : urlAction,
-				data : "id=" + idUser + "&acao=deletarAjax",
-				success : function (response){
-					
-					limparForm();
-					document.getElementById("msg").textContent = response;
-				}
-			}).fail(function(xhr, status, errorThrown){
-				alert("Erro ao deletar usuário por Id: " + xhr.responseText);
-				
-			});
-			
+
+		function criarDelete() {
+
+			if (confirm("Deseja Realmente Excluir os Dados?")) {
+
+				document.getElementById("formUser").method = "get";
+				document.getElementById("acao").value = "deletar";
+				document.getElementById("formUser").submit();
+			}
 		}
-		
-	}
-	
-	function criarDelete() {
-		
-		if(confirm("Deseja Realmente Excluir os Dados?")){
-		
-		document.getElementById("formUser").method = "get";
-		document.getElementById("acao").value = "deletar";
-		document.getElementById("formUser").submit();
+
+		function limparForm() {
+
+			var elementos = document.getElementById("formUser").elements; //retorna os elementos html dentro do form.
+			for (p = 0; p < elementos.length; p++) {
+				elementos[p].value = "";
+			}
 		}
-	}
-	
-	function limparForm() {
-		
-		var elementos = document.getElementById("formUser").elements; //retorna os elementos html dentro do form.
-		for(p=0; p < elementos.length; p++){
-			elementos[p].value = "";
-		}
-	}
-	
-	
 	</script>
 </body>
 
