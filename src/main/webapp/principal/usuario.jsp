@@ -1,3 +1,4 @@
+<%@page import="model.ModelLogin"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 	
@@ -63,11 +64,35 @@
 																<select class="form-control"
 																	aria-label="Default select example" name="perfil">
 																	<option disabled="disabled">[Selecionar o Perfil]</option>
-																	<option value="ADMIN">Admin</option>
-																	<option value="SECRETARIA">Secretária</option>
-																	<option value="AUXILIAR">Auxiliar</option>
-																</select> <span class="form-bar"></span> <label
-																	class="float-label">Perfil</label>
+																	<option value="ADMIN"
+																		<%ModelLogin modelLogin = (ModelLogin) request.getAttribute("modelLogin");
+																	
+																		if (modelLogin != null && modelLogin.getPerfil().equals("ADMIN")) {
+																			out.print(" ");
+																			out.print("selected=\"selected\"");
+																			out.print(" ");
+																		}%>>Admin</option>
+
+																	<option value="SECRETARIA" <% 
+																	
+																		modelLogin = (ModelLogin) request.getAttribute("modelLogin");
+																	
+																	if (modelLogin != null && modelLogin.getPerfil().equals("SECRETARIA")){
+																		out.print(" ");
+																		out.print("selected=\"selected\"");
+																		out.print(" ");																	
+																	}%>>Secretária</option>
+																	<option value="AUXILIAR" <% 
+																	
+																		modelLogin = (ModelLogin) request.getAttribute("modelLogin");
+																	
+																	if (modelLogin != null && modelLogin.getPerfil().equals("AUXILIAR")){
+																		out.print(" ");
+																		out.print("selected=\"selected\"");
+																		out.print(" ");																	
+																	}%>>Auxiliar</option>
+																</select> <span class="form-bar"></span> 
+																<label class="float-label">Perfil</label>
 															</div>
 															<div class="form-group form-default">
 																<input type="text" name="login" id="login"
