@@ -40,7 +40,7 @@
 
 													<div class="card-block">
 														<h4 class="sub-title">Cadastros de Usuários</h4>
-														<form class="form-material" action="<%= request.getContextPath()%>/ServletUsuarioController" method="post" id="formUser">
+														<form class="form-material" enctype="multipart/form-data" action="<%= request.getContextPath()%>/ServletUsuarioController" method="post" id="formUser">
 															
 															<input type="hidden" name="acao" id="acao" value="">
 															<div class="form-group form-default form-static-label">
@@ -48,12 +48,22 @@
 																	class="form-control"  readonly="readonly" value="${modelLogin.id}"> <span
 																	class="form-bar"></span> <label class="float-label">ID:</label>
 															</div>
+															<div class="form-group form-default input-group mb-4">
+																<div class="input-group-prepend">
+																	<img alt="Imagem User" src="https://www.hostinger.com.br/tutoriais/wp-content/uploads/sites/12/2018/12/O-Que-e-CMS-Sistema-de-Gerenciamento-de-Conte%C3%BAdo.png" width="70px;">
+																</div>
+																<input type="file" class="form-control-file" style="margin-top: 10px; margin-left: 5px;" >
+
+
+															</div>
+
+
 															<div class="form-group form-default">
 																<input type="text" name="nome" id="nome"
 																	class="form-control" required="required" value="${modelLogin.nome}"> <span
 																	class="form-bar"></span> <label class="float-label">Nome</label>
 															</div>
-															<div class="form-group form-default">
+															<div class="form-group form-default form-static-label">
 																<input type="email" name="email" id="email"
 																	class="form-control" required="required"
 																	autocomplete="off" value="${modelLogin.email}">
@@ -94,12 +104,12 @@
 																</select> <span class="form-bar"></span> 
 																<label class="float-label">Perfil</label>
 															</div>
-															<div class="form-group form-default">
+															<div class="form-group form-default form-static-label">
 																<input type="text" name="login" id="login"
 																	class="form-control" required="required" autocomplete="off" value="${modelLogin.login}"> <span
 																	class="form-bar"></span> <label class="float-label">Login</label>
 															</div>
-															<div class="form-group form-default">
+															<div class="form-group form-default form-static-label">
 																<input type="password" name="senha" id="senha"
 																	class="form-control" required="required" autocomplete="off" value="${modelLogin.senha}"> <span
 																	class="form-bar"></span> <label class="float-label">Senha</label>
