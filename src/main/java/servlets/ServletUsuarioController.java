@@ -127,15 +127,16 @@ public class ServletUsuarioController extends ServletGenericUtil {
 			modelLogin.setSexo(sexo);
 			
 			if (ServletFileUpload.isMultipartContent(request)) {
-				
-				Part part = request.getPart("fileFoto"); /*Pega a foto da tela*/
-				
-				byte[] foto = IOUtils.toByteArray(part.getInputStream());/*Converte a imagem para byte*/
-				
-				String imagemBase64 = "data:image/" + part.getContentType().split("\\/")[1] + ";base64," + new Base64().encodeBase64String(foto);
-				
-				modelLogin.setFotouser(imagemBase64);
-				modelLogin.setExtensaofotouser(part.getContentType().split("\\/")[1]);				
+
+				Part part = request.getPart("fileFoto"); /* Pega a foto da tela */
+
+				if (part.getSize() > 0) {
+						byte[] foto = IOUtils.toByteArray(part.getInputStream());/* Converte a imagem para byte */
+						String imagemBase64 = "data:image/" + part.getContentType().split("\\/")[1] + ";base64," + new Base64().encodeBase64String(foto);
+	
+						modelLogin.setFotouser(imagemBase64);
+						modelLogin.setExtensaofotouser(part.getContentType().split("\\/")[1]);
+				}
 			}
 
 			if (daoUsuarioRepository.validaLogin(modelLogin.getLogin()) && modelLogin.getId() == null) {
