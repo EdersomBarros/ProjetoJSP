@@ -102,7 +102,7 @@ public class DAOUsuarioRepository {
 
 		List<ModelLogin> retorno = new ArrayList<>();
 
-		String sql = "SELECT * FROM model_login where upper(nome) like upper(?) and useradmin is false and usuario_id = ?";
+		String sql = "SELECT * FROM model_login where upper(nome) like upper(?) and useradmin is false and usuario_id = ? limit 5";
 
 		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setString(1, "%" + nome + "%");
@@ -266,11 +266,41 @@ public class DAOUsuarioRepository {
 
 		List<ModelLogin> retorno = new ArrayList<>();
 
-		String sql = "SELECT * FROM model_login WHERE useradmin is false and usuario_id = " + userLogado;
+		String sql = "SELECT * FROM model_login WHERE useradmin is false and usuario_id = " + userLogado + "limit 5";
 
 		PreparedStatement statement = connection.prepareStatement(sql);
 
 		ResultSet resultado = statement.executeQuery();
+
+		while (resultado.next()) {/* percorrer as linhas de resultado de sql */
+			ModelLogin modelLogin = new ModelLogin();
+
+			modelLogin.setEmail(resultado.getString("email"));
+			modelLogin.setId(resultado.getLong("id"));
+			modelLogin.setLogin(resultado.getString("login"));
+			modelLogin.setNome(resultado.getString("nome"));
+			modelLogin.setPerfil(resultado.getString("perfil"));
+			modelLogin.setSexo(resultado.getString("sexo"));
+
+			// modelLogin.setSenha(resultado.getString("senha"));
+
+			retorno.add(modelLogin);
+
+		}
+
+		return retorno;
+
+	}
+	
+	public List<ModelLogin> consultaUsuarioListPaginada(Long userLogado, Integer offSet) throws Exception {
+
+				List<ModelLogin> retorno = new ArrayList<>();
+		
+				String sql = "SELECT * FROM model_login WHERE useradmin is false and usuario_id = " + userLogado + "order by nome offset "+ offSet +" limit 5";
+		
+				PreparedStatement statement = connection.prepareStatement(sql);
+		
+				ResultSet resultado = statement.executeQuery();
 
 		while (resultado.next()) {/* percorrer as linhas de resultado de sql */
 			ModelLogin modelLogin = new ModelLogin();
