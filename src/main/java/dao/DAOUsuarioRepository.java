@@ -296,7 +296,7 @@ public class DAOUsuarioRepository {
 
 				List<ModelLogin> retorno = new ArrayList<>();
 		
-				String sql = "SELECT * FROM model_login WHERE useradmin is false and usuario_id = " + userLogado + "order by nome offset "+ offSet +" limit 5";
+				String sql = "SELECT * FROM model_login WHERE useradmin is false and usuario_id= " + userLogado + "order by nome offset "+ offSet +" limit 5";
 		
 				PreparedStatement statement = connection.prepareStatement(sql);
 		
@@ -319,6 +319,27 @@ public class DAOUsuarioRepository {
 		}
 
 		return retorno;
+
+	}
+	
+	public int totalPagina(Long userLogado) throws Exception {
+		String sql = "select count(1) as total from model_login where usuario_id = " + userLogado;
+
+		PreparedStatement statement = connection.prepareStatement(sql);
+
+		ResultSet resultado = statement.executeQuery();
+		
+		resultado.next();
+
+		Double cadastros = resultado.getDouble("total");
+		Double porPagina = 5.0;
+		Double pagina = cadastros / porPagina;
+		Double resto = pagina % 2;
+
+		if (resto > 0) {
+			pagina++;
+		}
+		return pagina.intValue();
 
 	}
 
