@@ -3,7 +3,6 @@ package dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -97,6 +96,32 @@ public class DAOUsuarioRepository {
 		return this.consultaUsuario(objeto.getLogin(), usuarioLogado);
 
 	}
+	
+	public int consultaUsuarioListTotalPaginaPaginacao(String nome, Long usuarioLogado) throws Exception {
+
+
+		String sql = "SELECT count(1) as total from model_login where upper(nome) like upper(?) and useradmin is false and usuario_id = ? ";
+
+		PreparedStatement statement = connection.prepareStatement(sql);
+		statement.setString(1, "%" + nome + "%");
+		statement.setLong(2, usuarioLogado);
+
+		ResultSet resultado = statement.executeQuery();
+
+		resultado.next();
+
+		Double cadastros = resultado.getDouble("total");
+		Double porPagina = 5.0;
+		Double pagina = cadastros / porPagina;
+		Double resto = pagina % 2;
+
+		if (resto > 0) {
+			pagina++;
+		}
+		return pagina.intValue();
+
+
+	}
 
 	public List<ModelLogin> consultaUsuarioList(String nome, Long usuarioLogado) throws Exception {
 
@@ -107,6 +132,37 @@ public class DAOUsuarioRepository {
 		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setString(1, "%" + nome + "%");
 		statement.setLong(2, usuarioLogado);
+
+		ResultSet resultado = statement.executeQuery();
+
+		while (resultado.next()) {/* percorrer as linhas de resultado de sql */
+			ModelLogin modelLogin = new ModelLogin();
+
+			modelLogin.setEmail(resultado.getString("email"));
+			modelLogin.setId(resultado.getLong("id"));
+			modelLogin.setLogin(resultado.getString("login"));
+			modelLogin.setNome(resultado.getString("nome"));
+			modelLogin.setPerfil(resultado.getString("perfil"));
+			modelLogin.setSexo(resultado.getString("sexo"));
+			// modelLogin.setSenha(resultado.getString("senha"));
+
+			retorno.add(modelLogin);
+
+		}
+
+		return retorno;
+
+	}
+	public List<ModelLogin> consultaUsuarioListOffSet(String nome, Long usuarioLogado, int offSet) throws Exception {
+
+		List<ModelLogin> retorno = new ArrayList<>();
+
+		String sql = "SELECT * FROM model_login where upper(nome) like upper(?) and useradmin is false and usuario_id = ? offset "+offSet+" limit 5";
+
+		PreparedStatement statement = connection.prepareStatement(sql);
+		statement.setString(1, "%" + nome + "%");
+		statement.setLong(2, usuarioLogado);
+		
 
 		ResultSet resultado = statement.executeQuery();
 
