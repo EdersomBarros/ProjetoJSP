@@ -187,6 +187,9 @@
 															<button type="button" class="btn btn-primary waves-effect waves-light" onclick="limparForm();">Novo</button>
 															<button class="btn btn-success waves-effect waves-light">Salvar</button>
 															<button type="button" class="btn btn-danger waves-effect waves-light" onclick="criaDeleteComAjax();">Excluir</button>
+															<c:if test="${modelLogin.id > 0}">
+															<a href="<%= request.getContextPath() %>/ServletTelefone?iduser=${modelLogin.id}" class="btn waves-effect waves-light btn-grd-info ">Telefone</a>
+															</c:if>
 															<button type="button" class="btn btn-dark" data-toggle="modal" data-target="#exampleModalUsuario">Pesquisar</button>
 														</form>
 													</div>
