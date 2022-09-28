@@ -65,15 +65,21 @@
 															</div>
 
 
+															
+															<div class="form-group form-default form-static-label">
+																<input type="text" name="nome" id="nome"
+																	class="form-control" required="required" value="${modelLogin.nome}"> <span
+																	class="form-bar"></span> <label class="float-label">Nome</label>
+															</div>
 															<div class="form-group form-default form-static-label">
 																<input type="text" name="dataNascimento" id="dataNascimento"
 																	class="form-control" required="required" value="${modelLogin.dataNascimento}"> <span
 																	class="form-bar"></span> <label class="float-label">Dat. Nascimento</label>
 															</div>
 															<div class="form-group form-default form-static-label">
-																<input type="text" name="nome" id="nome"
-																	class="form-control" required="required" value="${modelLogin.nome}"> <span
-																	class="form-bar"></span> <label class="float-label">Nome</label>
+																<input type="text" name="rendamensal" id="rendamensal"
+																	class="form-control" required="required" value="${modelLogin.rendaMensal}"> <span
+																	class="form-bar"></span> <label class="float-label">Renda Mensal:</label>
 															</div>
 															<div class="form-group form-default form-static-label">
 																<input type="email" name="email" id="email"
@@ -305,6 +311,9 @@
 </div>
 	
 	<script type="text/javascript">
+	
+	$("#rendamensal").maskMoney({showSymbol:true, symbol:"R$ ", decimal:",", thousands:"."});
+	
 	$( function() {
 		  
 		  $("#dataNascimento").datepicker({
