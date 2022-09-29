@@ -337,7 +337,7 @@
 			    nextText: 'Próximo',
 			    prevText: 'Anterior'
 			});
-	} );
+	});
 	$("#numero").keypress(function (event) {
 		return /\d/.test(String.fromCharCode(event.keyCode));
 		
