@@ -8,6 +8,7 @@ import java.util.List;
 
 import connection.SingleConnectionBanco;
 import model.ModelLogin;
+import model.ModelTelefone;
 
 public class DAOUsuarioRepository {
 
@@ -392,7 +393,63 @@ public class DAOUsuarioRepository {
 		return retorno;
 
 	}
-	
+	public List<ModelLogin> consultaUsuarioListRel(Long userLogado) throws Exception {
+
+		List<ModelLogin> retorno = new ArrayList<>();
+
+		String sql = "SELECT * FROM model_login WHERE useradmin is false and usuario_id = " + userLogado;
+
+		PreparedStatement statement = connection.prepareStatement(sql);
+
+		ResultSet resultado = statement.executeQuery();
+
+		while (resultado.next()) {/* percorrer as linhas de resultado de sql */
+			ModelLogin modelLogin = new ModelLogin();
+
+			modelLogin.setEmail(resultado.getString("email"));
+			modelLogin.setId(resultado.getLong("id"));
+			modelLogin.setLogin(resultado.getString("login"));
+			modelLogin.setNome(resultado.getString("nome"));
+			modelLogin.setPerfil(resultado.getString("perfil"));
+			modelLogin.setSexo(resultado.getString("sexo"));
+			
+			modelLogin.setTelefones(this.listFone(modelLogin.getId()));
+
+
+			retorno.add(modelLogin);
+
+		}
+
+		return retorno;
+
+	}
+
+	public List<ModelTelefone> listFone(Long idUserPai) throws Exception {
+
+		List<ModelTelefone> retorno = new ArrayList<ModelTelefone>();
+
+		String sql = "select * from telefone where usuario_pai_id = ?";
+
+		PreparedStatement preparedStatement = connection.prepareStatement(sql);
+		preparedStatement.setLong(1, idUserPai);
+
+		ResultSet resultSet = preparedStatement.executeQuery();
+
+		while (resultSet.next()) {
+
+			ModelTelefone modelTelefone = new ModelTelefone();
+			modelTelefone.setId(resultSet.getLong("id"));
+			modelTelefone.setNumero(resultSet.getString("numero"));
+			modelTelefone.setUsuario_cad_id(this.consultaUsuarioID(resultSet.getLong("usuario_cad_id")));
+			modelTelefone.setUsuario_pai_id(this.consultaUsuarioID(resultSet.getLong("usuario_pai_id")));
+			
+			retorno.add(modelTelefone);
+		}
+
+		return retorno;
+
+	}
+
 	public List<ModelLogin> consultaUsuarioListPaginada(Long userLogado, Integer offSet) throws Exception {
 
 				List<ModelLogin> retorno = new ArrayList<>();

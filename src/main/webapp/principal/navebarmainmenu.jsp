@@ -11,7 +11,7 @@
 		<div class="">
 			<div class="main-menu-header">
 				<c:if test="${imagemUsuario != '' && imagemUsuario != null}">
-					<img class="img-80 img-radius" src="${ imagemUsuario}"
+					<img class="img-80 img-radius" src="${imagemUsuario}"
 						alt="User-Profile-Image">
 				</c:if>
 

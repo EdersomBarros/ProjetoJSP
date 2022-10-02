@@ -1,5 +1,8 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+<%@page import="model.ModelLogin"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="ISO-8859-1"%>
+	
+<%@ taglib  uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -54,6 +57,32 @@
 
 
 														</form>
+														<div style="height: 300px; overflow: scroll;">
+															<table class="table" id="tabelaresultadosview">
+																<thead>
+																	<tr>
+																		<th scope="col">ID</th>
+																		<th scope="col">Nome</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<c:forEach items="${listaUser}" var="ml">
+																		<tr>
+																			<td><c:out value="${ml.id}"></c:out></td>
+																			<td><c:out value="${ml.nome}"></c:out></td>
+																		</tr>
+																		<c:forEach items="${ml.telefones}" var="fone">
+																			<tr>
+																				<td />
+																				<td style="font-size: 10px;"><c:out	value="${fone.numero}"></c:out></td>
+
+																			</tr>
+																		</c:forEach>
+																	</c:forEach>
+																</tbody>
+															</table>
+
+														</div>
 													</div>
 												</div>
 											</div>

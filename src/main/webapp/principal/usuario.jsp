@@ -279,23 +279,23 @@
     	<button class="btn btn-success" type="button" onclick="buscarUsuario();">Buscar</button>
   		</div>
 		</div>
-		<div style="height: 300px; overflow: scroll;" >
-		<table class="table" id="tabelaresultados">
-		  <thead>
-		    <tr>
-		      <th scope="col">ID</th>
-		      <th scope="col">Nome</th>
-		      <th scope="col">Ver</th>
-		    </tr>
-		  </thead>
-		  <tbody>
-		    
-		    
-		    
-		  </tbody>
-		</table>
-			
-		</div>
+					<div style="height: 300px; overflow: scroll;">
+						<table class="table" id="tabelaresultados">
+							<thead>
+								<tr>
+									<th scope="col">ID</th>
+									<th scope="col">Nome</th>
+									<th scope="col">Ver</th>
+								</tr>
+							</thead>
+							<tbody>
+
+
+
+							</tbody>
+						</table>
+
+					</div>
 					<nav aria-label="Page navigation example">
 						<ul class="pagination" id="ulPaginacaoAjax">
 
