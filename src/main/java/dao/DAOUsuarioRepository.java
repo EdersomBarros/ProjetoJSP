@@ -1,8 +1,10 @@
 package dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -412,6 +414,7 @@ public class DAOUsuarioRepository {
 			modelLogin.setNome(resultado.getString("nome"));
 			modelLogin.setPerfil(resultado.getString("perfil"));
 			modelLogin.setSexo(resultado.getString("sexo"));
+			modelLogin.setDataNascimento(resultado.getDate("datanascimento"));
 			
 			modelLogin.setTelefones(this.listFone(modelLogin.getId()));
 
@@ -423,6 +426,40 @@ public class DAOUsuarioRepository {
 		return retorno;
 
 	}
+	public List<ModelLogin> consultaUsuarioListRel(Long userLogado, String dataInicial, String dataFinal) throws Exception {
+
+		List<ModelLogin> retorno = new ArrayList<>();
+
+		String sql = "SELECT * FROM model_login WHERE useradmin is false and usuario_id = " + userLogado + " and datanascimento >= ? and datanascimento <= ?";
+
+		PreparedStatement statement = connection.prepareStatement(sql);
+		statement.setDate(1, Date.valueOf(new SimpleDateFormat("yyyy-mm-dd").format(new SimpleDateFormat("dd/mm/yyyy").parse(dataInicial))));
+		statement.setDate(2, Date.valueOf(new SimpleDateFormat("yyyy-mm-dd").format(new SimpleDateFormat("dd/mm/yyyy").parse(dataFinal))));
+
+		ResultSet resultado = statement.executeQuery();
+
+		while (resultado.next()) {/* percorrer as linhas de resultado de sql */
+			ModelLogin modelLogin = new ModelLogin();
+
+			modelLogin.setEmail(resultado.getString("email"));
+			modelLogin.setId(resultado.getLong("id"));
+			modelLogin.setLogin(resultado.getString("login"));
+			modelLogin.setNome(resultado.getString("nome"));
+			modelLogin.setPerfil(resultado.getString("perfil"));
+			modelLogin.setSexo(resultado.getString("sexo"));
+			modelLogin.setDataNascimento(resultado.getDate("datanascimento"));
+			
+			modelLogin.setTelefones(this.listFone(modelLogin.getId()));
+
+
+			retorno.add(modelLogin);
+
+		}
+
+		return retorno;
+
+	}
+
 
 	public List<ModelTelefone> listFone(Long idUserPai) throws Exception {
 
