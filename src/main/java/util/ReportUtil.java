@@ -15,6 +15,21 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 public class ReportUtil implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
+	
+public byte[] geraRelatorioPDF(List listaDados, String nomeRelatorio, HashMap<String, Object> params, ServletContext servletContext) throws Exception {
+		
+		/*Cria a lista de Dados que vem do nosso SQL da consulta feita*/
+		JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(listaDados);
+		
+		String caminhaJasper = servletContext.getRealPath("relatorio") + File.separator + nomeRelatorio + ".jasper";
+		
+		
+		JasperPrint impressoraJasper = JasperFillManager.fillReport(caminhaJasper, params, dataSource);
+		
+		return JasperExportManager.exportReportToPdf(impressoraJasper);
+		
+		
+	}
 
 	public byte[] geraRelatorioPDF(List listaDados, String nomeRelatorio, ServletContext servletContext) throws Exception {
 		
