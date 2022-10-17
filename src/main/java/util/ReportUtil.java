@@ -1,15 +1,20 @@
 package util;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 
 import jakarta.servlet.ServletContext;
+import net.sf.jasperreports.engine.JRExporter;
+import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.export.JRXlsExporter;
 
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class ReportUtil implements Serializable{
@@ -45,6 +50,31 @@ public byte[] geraRelatorioPDF(List listaDados, String nomeRelatorio, HashMap<St
 		
 		
 	}
+	@SuppressWarnings("deprecation")
+	public byte[] geraRelatorioExcel(List listaDados, String nomeRelatorio, HashMap<String, Object> params, ServletContext servletContext) throws Exception {
+		
+		/*Cria a lista de Dados que vem do nosso SQL da consulta feita*/
+		JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(listaDados);
+		
+		String caminhaJasper = servletContext.getRealPath("relatorio") + File.separator + nomeRelatorio + ".jasper";
+		
+		
+		JasperPrint impressoraJasper = JasperFillManager.fillReport(caminhaJasper, params, dataSource);
+		
+		JRExporter exporter = new JRXlsExporter(); /*Excel*/
+		
+		exporter.setParameter(JRExporterParameter.JASPER_PRINT, impressoraJasper);
+		
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, baos);
+		
+		exporter.exportReport();
+		
+		return baos.toByteArray();
+		
+		
+	}
+
 	
 	
 
