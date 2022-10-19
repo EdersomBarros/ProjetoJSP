@@ -85,37 +85,45 @@
 	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 	<script type="text/javascript">
 	
-	
-	
-	
-	const myChart = new Chart(
-		    document.getElementById('myChart'),
-		    {
-				  type: 'line',
-				  data: {
-					  labels: [
-						  'January',
-						  'February',
-						  'March',
-						  'April',
-						  'May',
-						  'June',
-						],
-					  datasets: [{
-					    label: 'Gráfico de Média Salarial por Tipo',
-					    backgroundColor: 'rgb(255, 99, 132)',
-					    borderColor: 'rgb(255, 99, 132)',
-					    data: [0, 10, 5, 2, 20, 30, 45],
-					  }]
-					},
-				  options: {}
-				}
-		  );
+	var myChart = new Chart(document.getElementById('myChart'));
 	
 	function gerarGrafico() {
-		document.getElementById("acaoRelatorioImprimirTipo").value = 'imprimirRelatorioExcel';
-		$("#formUser").submit();
-		return false;
+		
+		var urlAction = document.getElementById('formUser').action;
+		var dataInicial = document.getElementById('dataInicial').value;
+		var dataFinal = document.getElementById('dataFinal').value;
+		
+		$.ajax({
+			method : "get",
+			url : urlAction,
+			data : "dataInicial=" + dataInicial + '&dataFinal=' + dataFinal +'&acao=graficoSalario', success : function(response) {
+				
+				var json = JSON.parse(response);
+				
+				myChart.destroy();
+				
+				 myChart = new Chart(
+					    document.getElementById('myChart'),
+					    {
+							  type: 'line',
+							  data: {
+								  labels: json.perfis,
+								  datasets: [{
+								    label: 'Gráfico de Média Salarial por Tipo',
+								    backgroundColor: 'rgb(255, 99, 132)',
+								    borderColor: 'rgb(255, 99, 132)',
+								    data: json.salarios,
+								  }]
+								},
+							  options: {}
+							}
+					  );
+			}
+		}).fail(function(xhr, status, errorThrown) {
+					alert("Erro ao buscar dados para o gráfico: " + xhr.responseText);
+
+				});
+	
 		
 	}
 	
