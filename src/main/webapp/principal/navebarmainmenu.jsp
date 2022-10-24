@@ -2,7 +2,7 @@
 	pageEncoding="ISO-8859-1"%>
 	<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 	
-	<c:set scope="session" var="perfil" value='<%= request.getSession().getAttribute("perfil").toString() %>'></c:set>
+	<c:set scope="session" var="perfil" value='<%= request.getSession().getAttribute("perfil") %>'></c:set>
 <nav class="pcoded-navbar">
 	<div class="sidebar_toggle">
 		<a href="#"><i class="icon-close icons"></i></a>

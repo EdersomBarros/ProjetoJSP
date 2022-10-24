@@ -321,52 +321,65 @@
 	$("#rendamensal").focus();
 	
 	var dataNascimento=$("#dataNascimento").val();
-	var dateFormat = new Date(dataNascimento);
-	$("#dataNascimento").val(dateFormat.toLocaleDateString('pt-BR',{timeZone: 'UTC'}));
-	$("#nome").focus();
 	
-	$( function() {
-		  
-		  $("#dataNascimento").datepicker({
-			    dateFormat: 'dd/mm/yy',
-			    dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'],
-			    dayNamesMin: ['D','S','T','Q','Q','S','S','D'],
-			    dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb','Dom'],
-			    monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
-			    monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
-			    nextText: 'Próximo',
-			    prevText: 'Anterior'
-			});
-	});
-	$("#numero").keypress(function (event) {
-		return /\d/.test(String.fromCharCode(event.keyCode));
+		if (dataNascimento != null && dataNascimento != "") {
+			var dateFormat = new Date(dataNascimento);
+			$("#dataNascimento").val(dateFormat.toLocaleDateString('pt-BR', {timeZone : 'UTC'}));
+		}
 		
-	});
-	$("#cep").keypress(function (event) {
-		return /\d/.test(String.fromCharCode(event.keyCode));
-		
-	});
-	
-	function pesquisaCep() {
-		var cep = $("#cep").val();
-		
-		//Consulta o webservice viacep.com.br/
-        $.getJSON("https://viacep.com.br/ws/"+ cep +"/json/?callback=?", function(dados) {
-        	
-        	if (!("erro" in dados)) {        		
-        		//Atualiza os campos com os valores da consulta.
-                $("#cep").val(dados.cep);
-        		$("#logradouro").val(dados.logradouro);
-                $("#bairro").val(dados.bairro);
-                $("#localidade").val(dados.localidade);
-                $("#uf").val(dados.uf);
-        	}
-			
+		$("#nome").focus();
+
+		$(function() {
+
+			$("#dataNascimento")
+					.datepicker(
+							{
+								dateFormat : 'dd/mm/yy',
+								dayNames : [ 'Domingo', 'Segunda', 'Terça',
+										'Quarta', 'Quinta', 'Sexta', 'Sábado' ],
+								dayNamesMin : [ 'D', 'S', 'T', 'Q', 'Q', 'S',
+										'S', 'D' ],
+								dayNamesShort : [ 'Dom', 'Seg', 'Ter', 'Qua',
+										'Qui', 'Sex', 'Sáb', 'Dom' ],
+								monthNames : [ 'Janeiro', 'Fevereiro', 'Março',
+										'Abril', 'Maio', 'Junho', 'Julho',
+										'Agosto', 'Setembro', 'Outubro',
+										'Novembro', 'Dezembro' ],
+								monthNamesShort : [ 'Jan', 'Fev', 'Mar', 'Abr',
+										'Mai', 'Jun', 'Jul', 'Ago', 'Set',
+										'Out', 'Nov', 'Dez' ],
+								nextText : 'Próximo',
+								prevText : 'Anterior'
+							});
 		});
-	}
-	
-	
-	
+		$("#numero").keypress(function(event) {
+			return /\d/.test(String.fromCharCode(event.keyCode));
+
+		});
+		$("#cep").keypress(function(event) {
+			return /\d/.test(String.fromCharCode(event.keyCode));
+
+		});
+
+		function pesquisaCep() {
+			var cep = $("#cep").val();
+
+			//Consulta o webservice viacep.com.br/
+			$.getJSON("https://viacep.com.br/ws/" + cep + "/json/?callback=?",
+					function(dados) {
+
+						if (!("erro" in dados)) {
+							//Atualiza os campos com os valores da consulta.
+							$("#cep").val(dados.cep);
+							$("#logradouro").val(dados.logradouro);
+							$("#bairro").val(dados.bairro);
+							$("#localidade").val(dados.localidade);
+							$("#uf").val(dados.uf);
+						}
+
+					});
+		}
+
 		function visualizarImg(fotoembase64, fileFoto) {
 
 			var preview = document.getElementById(fotoembase64); //campo de img html
@@ -390,73 +403,90 @@
 			window.location.href = urlAction + '?acao=buscarEditar&id=' + id;
 
 		}
-		
+
 		function buscaUserPagAjax(url) {
 			var urlAction = document.getElementById('formUser').action;
 			var nomeBusca = document.getElementById('nomeBusca').value;
-			$.ajax(
-					{
-						method : "get",
-						url : urlAction,
-						data : url,
-						success : function(response, textStatus, xhr) {
+			$
+					.ajax(
+							{
+								method : "get",
+								url : urlAction,
+								data : url,
+								success : function(response, textStatus, xhr) {
 
-							var json = JSON.parse(response);
+									var json = JSON.parse(response);
 
-							$('#tabelaresultados > tbody > tr').remove();
-							$("#ulPaginacaoAjax > li").remove();
+									$('#tabelaresultados > tbody > tr')
+											.remove();
+									$("#ulPaginacaoAjax > li").remove();
 
-							for (var p = 0; p < json.length; p++) {
-								$('#tabelaresultados > tbody')
-										.append(
-												'<tr> <td>'
-														+ json[p].id
-														+ '</td> <td> '
-														+ json[p].nome
-														+ '</td> <td><button onclick="verEditar('+ json[p].id+ ')" type="button" class="btn btn-info">Ver</button></td></tr>');
-							}
-
-							document.getElementById('totalResultados').textContent = 'Resultados: '
-									+ json.length;
-							
-							var totalPagina = xhr.getResponseHeader("totalPagina");
-							
-									for (var p = 0; p < totalPagina; p++) {
-										
-										var url = 'nomeBusca=' + nomeBusca + '&acao=buscarUserAjaxPage&pagina=' + (p * 5);
-										
-										$("#ulPaginacaoAjax").append('<li class="page-item"><a class="page-link" href="#" onclick="buscaUserPagAjax(\''+url+'\')">' + (p + 1) +'</a></li>');
-										
+									for (var p = 0; p < json.length; p++) {
+										$('#tabelaresultados > tbody')
+												.append(
+														'<tr> <td>'
+																+ json[p].id
+																+ '</td> <td> '
+																+ json[p].nome
+																+ '</td> <td><button onclick="verEditar('
+																+ json[p].id
+																+ ')" type="button" class="btn btn-info">Ver</button></td></tr>');
 									}
 
-						}
-					}).fail(
-					function(xhr, status, errorThrown) {
-						alert("Erro ao buscar usuário por Nome: "
-								+ xhr.responseText);
+									document.getElementById('totalResultados').textContent = 'Resultados: '
+											+ json.length;
 
-					});
-			
+									var totalPagina = xhr
+											.getResponseHeader("totalPagina");
+
+									for (var p = 0; p < totalPagina; p++) {
+
+										var url = 'nomeBusca='
+												+ nomeBusca
+												+ '&acao=buscarUserAjaxPage&pagina='
+												+ (p * 5);
+
+										$("#ulPaginacaoAjax")
+												.append(
+														'<li class="page-item"><a class="page-link" href="#" onclick="buscaUserPagAjax(\''
+																+ url
+																+ '\')">'
+																+ (p + 1)
+																+ '</a></li>');
+
+									}
+
+								}
+							}).fail(
+							function(xhr, status, errorThrown) {
+								alert("Erro ao buscar usuário por Nome: "
+										+ xhr.responseText);
+
+							});
+
 		}
 
 		function buscarUsuario() {
 
 			var nomeBusca = document.getElementById('nomeBusca').value;
 
-			if (nomeBusca != null && nomeBusca != ''
-					&& nomeBusca.trim() != '') {/*validando p que tem valor no banco de dados*/
+			if (nomeBusca != null && nomeBusca != '' && nomeBusca.trim() != '') {/*validando p que tem valor no banco de dados*/
 
 				var urlAction = document.getElementById('formUser').action;
-				$.ajax(
+				$
+						.ajax(
 								{
 									method : "get",
 									url : urlAction,
-									data : "nomeBusca=" + nomeBusca	+ '&acao=buscarUserAjax',
-									success : function(response, textStatus, xhr) {
+									data : "nomeBusca=" + nomeBusca
+											+ '&acao=buscarUserAjax',
+									success : function(response, textStatus,
+											xhr) {
 
 										var json = JSON.parse(response);
 
-										$('#tabelaresultados > tbody > tr').remove();
+										$('#tabelaresultados > tbody > tr')
+												.remove();
 										$("#ulPaginacaoAjax > li").remove();
 
 										for (var p = 0; p < json.length; p++) {
@@ -466,20 +496,33 @@
 																	+ json[p].id
 																	+ '</td> <td> '
 																	+ json[p].nome
-																	+ '</td> <td><button onclick="verEditar('+ json[p].id+ ')" type="button" class="btn btn-info">Ver</button></td></tr>');
+																	+ '</td> <td><button onclick="verEditar('
+																	+ json[p].id
+																	+ ')" type="button" class="btn btn-info">Ver</button></td></tr>');
 										}
 
-										document.getElementById('totalResultados').textContent = 'Resultados: '
+										document
+												.getElementById('totalResultados').textContent = 'Resultados: '
 												+ json.length;
-										
-										var totalPagina = xhr.getResponseHeader("totalPagina");
-										
-												for (var p = 0; p < totalPagina; p++) {
-													var url = 'nomeBusca=' + nomeBusca + '&acao=buscarUserAjaxPage&pagina=' + (p * 5);
-													
-													$("#ulPaginacaoAjax").append('<li class="page-item"><a class="page-link" href="#" onclick="buscaUserPagAjax(\''+url+'\')">' + (p + 1) +'</a></li>');
-													
-												}
+
+										var totalPagina = xhr
+												.getResponseHeader("totalPagina");
+
+										for (var p = 0; p < totalPagina; p++) {
+											var url = 'nomeBusca='
+													+ nomeBusca
+													+ '&acao=buscarUserAjaxPage&pagina='
+													+ (p * 5);
+
+											$("#ulPaginacaoAjax")
+													.append(
+															'<li class="page-item"><a class="page-link" href="#" onclick="buscaUserPagAjax(\''
+																	+ url
+																	+ '\')">'
+																	+ (p + 1)
+																	+ '</a></li>');
+
+										}
 
 									}
 								}).fail(
